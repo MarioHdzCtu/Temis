@@ -43,7 +43,8 @@ def create_gitignore(directory: str):
         return   
     click.echo(f"Copying gitignore file to {directory} directory...")
     try:
-        shutil.copy2(f'{os.path.dirname(__file__)}/.gitignore',directory)
+        this_path = os.path.dirname(__file__).replace("\\src","")
+        shutil.copy2(f'{this_path}/.gitignore',directory)
     except Exception as e:
         click.secho(f"Error when copying gitignore file to destination folder -> {e}", fg=ERROR)
     else:
@@ -75,6 +76,17 @@ def open_project_vscode(directory: str):
 @click.option('--no-git', is_flag=True, flag_value='True/False', help="Skips git initialization when creating the project folder. It won't add any .gitignore-like file")
 @click.option('--open-vscode', is_flag=True, flag_value='True/False', help="If passed the created folder will be opened in vscode")
 def create_project(name: str, no_git: bool, open_vscode: bool, directory: str = '.') -> None:
+    new_dir = f'{directory}\\{name}' if directory else f'.\\{name}'
+    create_folder(name, new_dir)
+    create_virtual_environment(new_dir)
+    if not no_git:
+        initialize_git(new_dir)
+        create_gitignore(new_dir)
+    if open_vscode:
+        open_project_vscode(new_dir)
+    click.secho(f"Folder for project {name} was created successfully", fg=SUCCESS)
+
+def create_project_2(name: str, no_git: bool, open_vscode: bool, directory: str = '.') -> None:
     new_dir = f'{directory}\\{name}' if directory else f'.\\{name}'
     create_folder(name, new_dir)
     create_virtual_environment(new_dir)
