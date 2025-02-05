@@ -39,8 +39,8 @@ def create_gitignore(directory: str):
         directory (str): The directory to which the .gitignore file will be copied to
     """
     if not os.path.isdir(directory):
-        click.secho(f"No directory named {directory} was found. .gitignore file was not copied to project folder", fg=WARNING)
-        return   
+        click.secho(f"No directory named {directory} was found. gitignore file was not copied to project folder", fg=WARNING)
+        return
     click.echo(f"Copying gitignore file to {directory} directory...")
     try:
         this_path = os.path.dirname(__file__).replace("\\src","")
